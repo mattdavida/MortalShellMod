@@ -25,6 +25,7 @@ Perfect for veterans wanting to experience the game differently, newcomers needi
 - **Super Speed Walking** - 5x movement speed for faster exploration
 - **Unlimited Stamina** - Zero stamina cost for all actions
 - **Fast Travel Unlock** - Instant access to all teleport locations
+- **Anti-Softlock System** - Always allow ornate mask usage to prevent getting stuck
 - **Shell Unlocking** - Unlock all shells immediately
 
 ### 🎒 Inventory & Progression
@@ -76,6 +77,7 @@ F9          -- Max out all inventory items
 PAGE_UP     -- Show current mod status
 NUM_LOCK    -- Unlock all shells
 PAGE_DOWN   -- Enable unlimited upgrades + unlock fast travel
+HOME        -- Enable anti-softlock (always allow ornate mask)
 
 -- Console Commands (press ~ or console key)
 matts_mod_help              -- Show all available hotkeys
@@ -98,6 +100,7 @@ matts_mod_help              -- Show all available hotkeys
 |--------|---------|-------------|--------|
 | **F3** | Walk Fast | 5x movement speed modifier | ✅ Toggle |
 | **PAGE_DOWN** | Fast Travel Unlock | Unlock all teleport locations | ❌ Permanent |
+| **HOME** | Anti-Softlock | Always allow ornate mask usage (prevents getting stuck after boss fights) | ❌ Hook-based |
 
 ### Inventory & Progression
 | Hotkey | Feature | Description | Toggle |
@@ -155,6 +158,14 @@ RegisterHook('/Game/UI/Blueprints/Merchant/UI_MerchantPanelNew.UI_MerchantPanelN
 RegisterHook('/Game/UI/Blueprints/Waifu/UI_FastTravel.UI_FastTravel_C:GetIsUnlocked',
     function(self, other)
         return true
+    end)
+
+-- Anti-Softlock System - Item Usage Override
+RegisterHook('/Game/Blueprints/GamePlay/GameplayPC.GameplayPC_C:InventoryUtil_GetCanUseItem',
+    function(self, ID, UsableInDarkForm)
+        if ID:get():ToString() == 'Mask_Ornate' then
+            return 11  -- Always allow ornate mask usage (prevents post-boss softlocks)
+        end
     end)
 ```
 

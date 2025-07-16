@@ -11,6 +11,7 @@ print('F9: Max out inventory')
 print('PAGE_UP: Show mod status')
 print('NUM_LOCK: Unlock all shells')
 print('PAGE_DOWN: Exploit inventory ( no cost for items / upgrades ) + unlock ALL fast travel locations')
+print('HOME: Always allow fast travel with ornate mask')
 print('----------------------------------------------------------')
 local Utils = require('Utils.Utils')
 local UEHelpers = require('UEHelpers.UeHelpers')
@@ -25,9 +26,9 @@ local mod_state = {
 
 local function stone_form_no_cooldown()
     local player = UEHelpers.GetPlayer()
-    if not player then 
+    if not player then
         print('Player not found - try again when in-game')
-        return 
+        return
     end
     print('Setting Player Stone Form Cooldown to 0')
     player.StoneFormCooldown = 0
@@ -35,11 +36,11 @@ end
 
 local function toggle_super_stone_form_max()
     local player = UEHelpers.GetPlayer()
-    if not player then 
+    if not player then
         print('Player not found - try again when in-game')
-        return 
+        return
     end
-    
+
     mod_state.super_stone_form = not mod_state.super_stone_form
     print('Player found: ' .. player:GetFullName())
     -- infinite stone form
@@ -58,9 +59,9 @@ end
 
 local function max_resolve()
     local player = UEHelpers.GetPlayer()
-    if not player then 
+    if not player then
         print('Player not found - try again when in-game')
-        return 
+        return
     end
     print('Setting Max Resolve to 1000000')
     player.MaxResolve = 1000000
@@ -71,11 +72,11 @@ end
 
 local function toggle_walk_fast()
     local player = UEHelpers.GetPlayer()
-    if not player then 
+    if not player then
         print('Player not found - try again when in-game')
-        return 
+        return
     end
-    
+
     mod_state.walk_fast = not mod_state.walk_fast
     if mod_state.walk_fast then
         print('Setting Walk Speed to 5 - Super Fast')
@@ -89,11 +90,11 @@ end
 
 local function toggle_super_stamina()
     local player = UEHelpers.GetPlayer()
-    if not player then 
+    if not player then
         print('Player not found - try again when in-game')
-        return 
+        return
     end
-    
+
     print('Player found: ' .. player:GetFullName())
     -- infinite stone form
     mod_state.super_stamina = not mod_state.super_stamina
@@ -108,11 +109,11 @@ end
 
 local function toggle_enhanced_parry_chance()
     local player = UEHelpers.GetPlayer()
-    if not player then 
+    if not player then
         print('Player not found - try again when in-game')
-        return 
+        return
     end
-    
+
     print('Player found: ' .. player:GetFullName())
     -- infinite stone form
     mod_state.enhanced_parry = not mod_state.enhanced_parry
@@ -146,14 +147,27 @@ local function show_status()
     print('=========================================')
 end
 
+-- always allow fast travel with ornate mask -- no more gettin stuck after picking up gland from boss
+local function always_allow_fast_travel()
+    RegisterHook('/Game/Blueprints/GamePlay/GameplayPC.GameplayPC_C:InventoryUtil_GetCanUseItem',
+        function(self, ID, UsableInDarkForm)
+            if ID:get():ToString() == 'Mask_Ornate' then
+                -- Enum_InventoryItem_CanUse -- 11 maps to NewEnumerator4 -- found value by trial and error
+                -- seems to work though and we are able to set per item
+                return 11
+            end
+        end)
+end
+
 local function toggle_matts_mods()
     stone_form_no_cooldown()
     toggle_walk_fast()
     toggle_super_stamina()
     max_resolve()
     toggle_enhanced_parry_chance()
+    always_allow_fast_travel()
 
-    -- this works - keeping just for me - most players won't enable this - good to get through areas quick for mod testing 
+    -- this works - keeping just for me - most players won't enable this - good to get through areas quick for mod testing
     local player = UEHelpers.GetPlayer()
     if player then
         print('Setting Temp Damage to 100 - One Hit Kill')
@@ -200,53 +214,53 @@ end
 
 local function unlock_all_shells()
     local player = UEHelpers.GetPlayer()
-    if not player then 
+    if not player then
         print('Player not found - try again when in-game')
-        return 
+        return
     end
     print('Unlocking All Shells for player')
     player:DH_UnlockAllShells()
 end
 
 local function exploit_inventory_and_unlock_fast_travel_locations()
-
--- INFINITE UPGRADES
-RegisterHook('/Game/UI/Blueprints/Waifu/UI_ShellUpgradeMenu.UI_ShellUpgradeMenu_C:SetCanBuy', function(self, other)
-    local obj = self:get()
-    obj.CanBuy = true
-    obj.Tar_Cost = 0
-    obj.Glimpses_Cost = 0
-    obj.CanBuy = true
-    obj.Tar_Cost = 0
-    obj.Glimpses_Cost = 0
-end)
-
--- INFINITE CURRENCY
-RegisterHook('/Game/UI/Blueprints/Merchant/UI_MerchantPanelNew.UI_MerchantPanelNew_C:GetPlayerCurrency',
-    function(self, other)
-        return 9999
-    end)
-
-RegisterHook('/Game/UI/Blueprints/Merchant/MerchantPanel.MerchantPanel_C:GetPlayerCurrencyAmount', function(self, other)
-    return 9999999999
-end)
-
-RegisterHook('/Game/UI/Blueprints/Merchant/UI_MerchantPanelNew.UI_MerchantPanelNew_C:SetCanBuySelected',
-    function(self, other)
+    -- INFINITE UPGRADES
+    RegisterHook('/Game/UI/Blueprints/Waifu/UI_ShellUpgradeMenu.UI_ShellUpgradeMenu_C:SetCanBuy', function(self, other)
         local obj = self:get()
-        obj.CanBuySelected = true
-        return true
+        obj.CanBuy = true
+        obj.Tar_Cost = 0
+        obj.Glimpses_Cost = 0
+        obj.CanBuy = true
+        obj.Tar_Cost = 0
+        obj.Glimpses_Cost = 0
     end)
 
+    -- INFINITE CURRENCY
+    RegisterHook('/Game/UI/Blueprints/Merchant/UI_MerchantPanelNew.UI_MerchantPanelNew_C:GetPlayerCurrency',
+        function(self, other)
+            return 9999
+        end)
 
--- OPEN ALL FAST TRAVELS
-RegisterHook('/Game/UI/Blueprints/Waifu/UI_FastTravel.UI_FastTravel_C:GetIsUnlocked',
-    function(self, other)
-        return true
-    end)
+    RegisterHook('/Game/UI/Blueprints/Merchant/MerchantPanel.MerchantPanel_C:GetPlayerCurrencyAmount',
+        function(self, other)
+            return 9999999999
+        end)
+
+    RegisterHook('/Game/UI/Blueprints/Merchant/UI_MerchantPanelNew.UI_MerchantPanelNew_C:SetCanBuySelected',
+        function(self, other)
+            local obj = self:get()
+            obj.CanBuySelected = true
+            return true
+        end)
 
 
+    -- OPEN ALL FAST TRAVELS
+    RegisterHook('/Game/UI/Blueprints/Waifu/UI_FastTravel.UI_FastTravel_C:GetIsUnlocked',
+        function(self, other)
+            return true
+        end)
 end
+
+
 
 RegisterKeyBind(Key.F1, {}, stone_form_no_cooldown)
 RegisterKeyBind(Key.F2, {}, toggle_super_stone_form_max)
@@ -260,7 +274,7 @@ RegisterKeyBind(Key.F9, {}, max_out_inventory)
 RegisterKeyBind(Key.PAGE_UP, {}, show_status)
 RegisterKeyBind(Key.NUM_LOCK, {}, unlock_all_shells)
 RegisterKeyBind(Key.PAGE_DOWN, {}, exploit_inventory_and_unlock_fast_travel_locations)
-
+RegisterKeyBind(Key.HOME, {}, always_allow_fast_travel)
 
 local function matts_mod_help(FullCommand, Parameters, Ar)
     print('todo: help message for hotkeys')
@@ -277,6 +291,7 @@ local function matts_mod_help(FullCommand, Parameters, Ar)
     Utils.Log(Ar, 'PAGE_UP: Show mod status')
     Utils.Log(Ar, 'NUM_LOCK: Unlock all shells')
     Utils.Log(Ar, 'PAGE_DOWN: Exploit inventory ( no cost for items / upgrades ) + unlock ALL fast travel locations')
+    Utils.Log(Ar, 'HOME: Always allow fast travel with ornate mask')
     Utils.Log(Ar, '--------------------------------')
     return true
 end
