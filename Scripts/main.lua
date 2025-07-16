@@ -13,16 +13,60 @@ print('NUM_LOCK: Unlock all shells')
 print('PAGE_DOWN: Exploit inventory ( no cost for items / upgrades ) + unlock ALL fast travel locations')
 print('HOME: Always allow fast travel with ornate mask')
 print('----------------------------------------------------------')
-local Utils = require('Utils.Utils')
 local UEHelpers = require('UEHelpers.UeHelpers')
+local Utils = require('Utils.Utils')
+
 
 -- Consolidated mod state
 local mod_state = {
     super_stone_form = false,
     walk_fast = false,
     super_stamina = false,
-    enhanced_parry = false
+    enhanced_parry = false,
+    enable_matts_notes = false
 }
+
+
+local function update_button_text()
+    if mod_state.enable_matts_notes then
+        print('Overriding Resume Button Text in Pause menu.')
+        print('CAUTION: This will override the default resume button text for the entire game session.')
+        local buttons = FindAllOf('UI_MainMenu_Button_C')
+        local scale_boxes = FindAllOf('ScaleBox')
+        if buttons then
+            for _, button in ipairs(buttons) do
+                if Utils.StringContains(button:GetFullName(), 'Button_Resume') then
+                    local status_text = "RESUME - MATT'S MOD\n"
+                    status_text = status_text .. "F1: Stone cooldown (ALWAYS ON)\n"
+                    status_text = status_text ..
+                        "F2: Super stone form (" .. (mod_state.super_stone_form and "ON" or "OFF") .. ")\n"
+                    status_text = status_text .. "F3: Walk fast (" .. (mod_state.walk_fast and "ON" or "OFF") .. ")\n"
+                    status_text = status_text ..
+                        "F4: Super stamina (" .. (mod_state.super_stamina and "ON" or "OFF") .. ")\n"
+                    status_text = status_text .. "F5: Max resolve (ALWAYS ON)\n"
+                    status_text = status_text ..
+                        "F6: Enhanced parry (" .. (mod_state.enhanced_parry and "ON" or "OFF") .. ")\n"
+                    status_text = status_text .. "F7: ALL mods toggle\n"
+                    status_text = status_text .. "F8: God mode (ENGINE)\n"
+                    status_text = status_text .. "PAGE_UP: Show detailed status\n"
+                    status_text = status_text .. "NUM_LOCK: Unlock all shells\n"
+                    status_text = status_text ..
+                        "PAGE_DOWN: Exploit inventory ( no cost for items / upgrades ) + unlock ALL fast travel locations\n"
+                    status_text = status_text .. "HOME: Always allow fast travel with ornate mask\n"
+                    button.Text_Value = FText(status_text)
+                    button.Button_Width = 1040
+                    button.FontSize = 25
+                end
+            end
+        end
+
+        for _, scale_box in ipairs(scale_boxes) do
+            if Utils.StringContains(scale_box:GetFullName(), 'Button_Resume') then
+                scale_box.IgnoreInheritedScale = true
+            end
+        end
+    end
+end
 
 local function stone_form_no_cooldown()
     local player = UEHelpers.GetPlayer()
@@ -55,6 +99,8 @@ local function toggle_super_stone_form_max()
         player.ShouldEnableSuperStoneForm = false
         player.SuperStoneForm_Duration = 0
     end
+    update_button_text()
+
 end
 
 local function max_resolve()
@@ -85,6 +131,7 @@ local function toggle_walk_fast()
         print('Setting Walk Speed to 1 - Normal Speed')
         player.WalkSpeedModifier = 1
     end
+    update_button_text()
 end
 
 
@@ -105,6 +152,8 @@ local function toggle_super_stamina()
         print('Setting Stamina Cost Modifier to 1 - Normal Stamina')
         player.StaminaCostModifier = 1
     end
+    update_button_text()
+
 end
 
 local function toggle_enhanced_parry_chance()
@@ -124,6 +173,8 @@ local function toggle_enhanced_parry_chance()
         print('Setting Enhanced Parry Chance to 0 - Normal Parry Chance')
         player.EnhancedParry_Chance = 0
     end
+    update_button_text()
+
 end
 
 
@@ -136,6 +187,8 @@ local function toggle_god_mode()
     else
         print('CheatManager not found - try again when in-game')
     end
+    update_button_text()
+
 end
 
 local function show_status()
@@ -159,6 +212,11 @@ local function always_allow_fast_travel()
         end)
 end
 
+local function enable_matts_notes()
+    mod_state.enable_matts_notes = not mod_state.enable_matts_notes
+    update_button_text()
+end
+
 local function toggle_matts_mods()
     stone_form_no_cooldown()
     toggle_walk_fast()
@@ -166,6 +224,7 @@ local function toggle_matts_mods()
     max_resolve()
     toggle_enhanced_parry_chance()
     always_allow_fast_travel()
+    enable_matts_notes()
 
     -- this works - keeping just for me - most players won't enable this - good to get through areas quick for mod testing
     local player = UEHelpers.GetPlayer()
@@ -185,6 +244,8 @@ local function toggle_matts_mods()
         print('ONE HIT KILL: NO TOGGLE - MUST TRAVEL TO NEW AREA TO RESET')
         print('------------------------------------------------------------------------------------------------')
     end
+    update_button_text()
+
 end
 
 local function max_out_inventory()
@@ -261,7 +322,6 @@ local function exploit_inventory_and_unlock_fast_travel_locations()
 end
 
 
-
 RegisterKeyBind(Key.F1, {}, stone_form_no_cooldown)
 RegisterKeyBind(Key.F2, {}, toggle_super_stone_form_max)
 RegisterKeyBind(Key.F3, {}, toggle_walk_fast)
@@ -275,6 +335,7 @@ RegisterKeyBind(Key.PAGE_UP, {}, show_status)
 RegisterKeyBind(Key.NUM_LOCK, {}, unlock_all_shells)
 RegisterKeyBind(Key.PAGE_DOWN, {}, exploit_inventory_and_unlock_fast_travel_locations)
 RegisterKeyBind(Key.HOME, {}, always_allow_fast_travel)
+RegisterKeyBind(Key.CAPS_LOCK, {}, enable_matts_notes)
 
 local function matts_mod_help(FullCommand, Parameters, Ar)
     print('todo: help message for hotkeys')

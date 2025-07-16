@@ -6,6 +6,9 @@
 [![UE4SS](https://img.shields.io/badge/framework-UE4SS-green.svg)](https://github.com/UE4SS-RE/RE-UE4SS)
 [![Game](https://img.shields.io/badge/game-Mortal%20Shell-darkred.svg)](https://mortalshell.com/)
 
+![Dynamic Status Dashboard](https://github.com/user-attachments/assets/63c870be-1818-4774-9b42-53a5c44dda88)
+*Dynamic status dashboard showing real-time mod status integrated into the pause menu - press CAPS_LOCK to toggle*
+
 ## 🎯 Overview
 
 MattsMod is a **comprehensive UE4SS-based modification** for Mortal Shell, souls-like that's seeing renewed interest ( for me ) with the announcement of Mortal Shell 2. This mod provides extensive gameplay enhancements, shell unlocks, combat modifications, and quality-of-life improvements through intuitive hotkeys and powerful behind-the-scenes hooks.
@@ -37,6 +40,7 @@ Perfect for veterans wanting to experience the game differently, newcomers needi
 ### 🔧 User Experience
 - **Hotkey System** - F1-F9 + special keys for instant access
 - **Status Display** - Real-time mod state monitoring
+- **Dynamic Status Dashboard** - Live mod status in pause menu Resume button
 - **Smart Toggles** - Individual control over each enhancement
 - **Console Integration** - Help command and professional logging
 
@@ -79,6 +83,7 @@ PAGE_UP     -- Show current mod status
 NUM_LOCK    -- Unlock all shells
 PAGE_DOWN   -- Enable unlimited upgrades + unlock fast travel
 HOME        -- Enable anti-softlock (always allow ornate mask)
+CAPS_LOCK   -- Toggle dynamic status dashboard in pause menu
 
 -- Console Commands (press ~ or console key)
 matts_mod_help              -- Show all available hotkeys
@@ -115,6 +120,7 @@ matts_mod_help              -- Show all available hotkeys
 |--------|---------|-------------|-------|
 | **F7** | Matt's Mods ALL | Activates F1,F3,F4,F5,F6 + one-hit kill | ⚠️ See warnings |
 | **PAGE_UP** | Status Display | Shows current state of all toggles | ℹ️ Information |
+| **CAPS_LOCK** | Dynamic Status Dashboard | Transforms pause menu Resume button into live mod status display | 🎯 UI Enhancement |
 
 ## ⚠️ Important Warnings & Limitations
 
@@ -131,7 +137,8 @@ Some modifications **cannot be toggled off** and require area transitions to res
 ### Smart Usage Tips
 - **Use F7 carefully** - Combines multiple effects including permanent ones
 - **Save before experimenting** - Some effects persist until area change
-- **Check status regularly** - Use PAGE_UP to monitor active modifications
+- **Check status regularly** - Use PAGE_UP to monitor active modifications or CAPS_LOCK for visual dashboard
+- **Dynamic dashboard** - CAPS_LOCK transforms pause menu Resume button into live status display with all mod states
 - **God mode is engine-level** - Managed by UE4 cheat system, not mod state
 
 ## 🏗️ Technical Implementation
@@ -168,6 +175,24 @@ RegisterHook('/Game/Blueprints/GamePlay/GameplayPC.GameplayPC_C:InventoryUtil_Ge
             return 11  -- Always allow ornate mask usage (prevents post-boss softlocks)
         end
     end)
+
+-- Dynamic Status Dashboard - UI Text Override
+local function update_button_text()
+    local buttons = FindAllOf('UI_MainMenu_Button_C')
+    if buttons then
+        for _, button in ipairs(buttons) do
+            if Utils.StringContains(button:GetFullName(), 'Button_Resume') then
+                local status_text = "RESUME - MATT'S MOD\n"
+                status_text = status_text .. "F2: Super stone form (" .. (mod_state.super_stone_form and "ON" or "OFF") .. ")\n"
+                status_text = status_text .. "F3: Walk fast (" .. (mod_state.walk_fast and "ON" or "OFF") .. ")\n"
+                -- ... (full status display with all features)
+                button.Text_Value = FText(status_text)
+                button.Button_Width = 1040
+                button.FontSize = 25
+            end
+        end
+    end
+end
 ```
 
 ### Error Handling & User Experience
