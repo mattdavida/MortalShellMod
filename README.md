@@ -8,7 +8,7 @@
 
 ## 🎯 Overview
 
-MattsMod is a **comprehensive UE4SS-based modification** for Mortal Shell, a 4-year-old souls-like that's seeing renewed interest ( for me ) with the announcement of Mortal Shell 2. This mod provides extensive gameplay enhancements, shell unlocks, combat modifications, and quality-of-life improvements through intuitive hotkeys and powerful behind-the-scenes hooks.
+MattsMod is a **comprehensive UE4SS-based modification** for Mortal Shell, souls-like that's seeing renewed interest ( for me ) with the announcement of Mortal Shell 2. This mod provides extensive gameplay enhancements, shell unlocks, combat modifications, and quality-of-life improvements through intuitive hotkeys and powerful behind-the-scenes hooks.
 
 Perfect for veterans wanting to experience the game differently, newcomers needing assistance, or anyone wanting to explore all content without the traditional grind and have a little fun.
 
@@ -46,6 +46,7 @@ Perfect for veterans wanting to experience the game differently, newcomers needi
 - **[UE4SS for Unreal Engine 4](https://github.com/UE4SS-RE/RE-UE4SS)** - Install the latest UE4SS release
 - Mortal Shell (Steam/Epic Games/GOG)
 
+
 ### Installation
 1. **Install UE4SS** in your Mortal Shell game directory
    - Download latest UE4SS release
@@ -55,8 +56,8 @@ Perfect for veterans wanting to experience the game differently, newcomers needi
    - Clone or download this repository
    - Place in `Mortal Shell/Binaries/Win64/ue4ss/Mods/MattsMod/`
 3. **Install Shared Framework**
-   - Download the shared utilities framework
-   - Place in `Mortal Shell/Binaries/Win64/ue4ss/Mods/shared/`
+   - Download from [UE4SS_Lua_Utils](https://github.com/mattdavida/UE4SS_Lua_Utils)
+   - Place contents in `Mortal Shell/Binaries/Win64/ue4ss/Mods/shared/`
 4. **Configure UE4SS**
    - Add `MattsMod: 1` to your `mods.txt` file
    - Ensure console is enabled in UE4SS settings
@@ -216,4 +217,3 @@ This project is shared freely for educational and personal use. The code demonst
 ---
 
 **Built with ❤️ for the Mortal Shell community**  
-*The first comprehensive mod for a 4-year-old game getting a sequel* 
