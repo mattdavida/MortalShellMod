@@ -19,6 +19,8 @@ local Utils = require('Utils.Utils')
 
 -- Consolidated mod state
 local mod_state = {
+    no_stone_cooldown = false,
+    max_resolve = false,
     super_stone_form = false,
     walk_fast = false,
     super_stamina = false,
@@ -37,13 +39,13 @@ local function update_button_text()
             for _, button in ipairs(buttons) do
                 if Utils.StringContains(button:GetFullName(), 'Button_Resume') then
                     local status_text = "RESUME - MATT'S MOD\n"
-                    status_text = status_text .. "F1: Stone cooldown (ALWAYS ON)\n"
+                    status_text = status_text .. "F1: No stone cooldown (" .. (mod_state.no_stone_cooldown and "ON" or "OFF") .. ")\n"
                     status_text = status_text ..
                         "F2: Super stone form (" .. (mod_state.super_stone_form and "ON" or "OFF") .. ")\n"
                     status_text = status_text .. "F3: Walk fast (" .. (mod_state.walk_fast and "ON" or "OFF") .. ")\n"
                     status_text = status_text ..
                         "F4: Super stamina (" .. (mod_state.super_stamina and "ON" or "OFF") .. ")\n"
-                    status_text = status_text .. "F5: Max resolve (ALWAYS ON)\n"
+                    status_text = status_text .. "F5: Max resolve (" .. (mod_state.max_resolve and "ON" or "OFF") .. ")\n"
                     status_text = status_text ..
                         "F6: Enhanced parry (" .. (mod_state.enhanced_parry and "ON" or "OFF") .. ")\n"
                     status_text = status_text .. "F7: ALL mods toggle\n"
@@ -75,6 +77,7 @@ local function stone_form_no_cooldown()
         return
     end
     print('Setting Player Stone Form Cooldown to 0')
+    mod_state.no_stone_cooldown = true
     player.StoneFormCooldown = 0
 end
 
@@ -114,6 +117,7 @@ local function max_resolve()
     player.CurrentResolve = 1000000
     player.ResolveDrainDelay = 0
     player.ResolveDrainRate = 0
+    mod_state.max_resolve = true
 end
 
 local function toggle_walk_fast()
