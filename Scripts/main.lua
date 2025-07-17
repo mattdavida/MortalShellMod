@@ -372,14 +372,13 @@ local function super_ballistazooka()
     local idle_to_reload = StaticFindObject('/Game/MainChar/anims/shooting/Char_anims/Ballista_Idle_To_Reload.Ballista_Idle_To_Reload')
     local equip_instant_reload = StaticFindObject('/Game/MainChar/anims/shooting/Char_anims/Ballista_Equip_InstantReload_Montage.Ballista_Equip_InstantReload_Montage')
     if anim_montage then
-        print('Anim Montage found: ' .. tostring(anim_montage:GetFullName()))
-        print('original length: ' .. tostring(anim_montage.SequenceLength))
         --  original length: 5.7333331108093
         anim_montage.SequenceLength = 0.01
         equip_montage.SequenceLength = 0.01
         idle_to_aim.SequenceLength = 0.01
         idle_to_reload.SequenceLength = 0.01
         equip_instant_reload.SequenceLength = 0.01
+        print('Super Ballistazooka: ON')
     else
         print('Anim Montage not found')
     end
