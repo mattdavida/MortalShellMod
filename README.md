@@ -23,6 +23,7 @@ Perfect for veterans wanting to experience the game differently, newcomers needi
 - **God Mode Toggle** - Complete invulnerability via UE4 cheat system
 - **Resolve Management** - Unlimited resolve with no drain
 - **One-Hit Kills** - Developer testing feature for rapid progression
+- **Instant Weapon Switching** - Hotkey access to all weapons (1-6) regardless of unlock status
 
 ### 🏃‍♂️ Movement & Exploration
 - **Super Speed Walking** - 5x movement speed for faster exploration
@@ -35,6 +36,7 @@ Perfect for veterans wanting to experience the game differently, newcomers needi
 - **Inventory Maximization** - Set all stackable items to maximum capacity
 - **Unlimited Upgrades** - Zero cost for all shell upgrades and abilities
 - **Infinite Currency** - Unlimited tar and glimpses for purchases
+- **Complete Unlock System** - Unlock all shells, shell names, weapons, and riposte abilities instantly
 - **Smart Exploit System** - Hook-based modification for seamless experience
 
 ### 🔧 User Experience
@@ -84,9 +86,19 @@ NUM_LOCK    -- Unlock all shells
 PAGE_DOWN   -- Enable unlimited upgrades + unlock fast travel
 HOME        -- Enable anti-softlock (always allow ornate mask)
 CAPS_LOCK   -- Toggle dynamic status dashboard in pause menu
+BACKSPACE   -- Unlock ALL shells, shell names, weapons, and riposte abilities
+
+-- Instant Weapon Switching (works even if weapon not unlocked)
+1           -- Summon Hallowed Sword
+2           -- Summon Smoldering Mace
+3           -- Summon Hammer and Chisel
+4           -- Summon Martyr's Blade
+5           -- Summon Axatana twin blades
+6           -- Summon Axatana axe
 
 -- Console Commands (press ~ or console key)
 matts_mod_help              -- Show all available hotkeys
+summon_weapon <id>          -- Summon specific weapon by ID (0-5)
 ```
 
 ## 📋 Features Reference
@@ -113,7 +125,18 @@ matts_mod_help              -- Show all available hotkeys
 |--------|---------|-------------|--------|
 | **F9** | Max Inventory | Set all stackable items to max capacity | ❌ One-time |
 | **NUM_LOCK** | Unlock Shells | Unlock all shells via game function | ❌ One-time |
+| **BACKSPACE** | Unlock Everything | Unlock all shells, shell names, weapons, riposte abilities | ❌ One-time |
 | **PAGE_DOWN** | Unlimited Upgrades | Zero cost upgrades + infinite currency | ❌ Hook-based |
+
+### Instant Weapon Access
+| Hotkey | Weapon | Description | Notes |
+|--------|--------|-------------|-------|
+| **1** | Hallowed Sword | Summon starting weapon | 🗡️ Works without unlock |
+| **2** | Smoldering Mace | Summon Hadern's weapon | 🔥 Works without unlock |
+| **3** | Hammer and Chisel | Summon Crucix's weapon | 🔨 Works without unlock |
+| **4** | Martyr's Blade | Summon Tarsus's weapon | ⚔️ Works without unlock |
+| **5** | Axatana Twin Blades | Summon Imrod's twin blades | 🗡️🗡️ Works without unlock |
+| **6** | Axatana Axe | Summon Imrod's axe form | 🪓 Works without unlock |
 
 ### Utility & Information
 | Hotkey | Feature | Description | Notes |

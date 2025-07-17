@@ -16,6 +16,14 @@ print('----------------------------------------------------------')
 local UEHelpers = require('UEHelpers.UeHelpers')
 local Utils = require('Utils.Utils')
 
+local weapon_map = {
+    [0] = "Hallowed Sword",
+    [1] = "Smoldering Mace",
+    [2] = "Hammer and Chisel",
+    [3] = "Martyr's Blade",
+    [4] = "Axatana twin blades",
+    [5] = "Axatana axe", 
+}
 
 -- Consolidated mod state
 local mod_state = {
@@ -25,7 +33,8 @@ local mod_state = {
     walk_fast = false,
     super_stamina = false,
     enhanced_parry = false,
-    enable_matts_notes = false
+    enable_matts_notes = false,
+    god_mode = false
 }
 
 
@@ -39,17 +48,20 @@ local function update_button_text()
             for _, button in ipairs(buttons) do
                 if Utils.StringContains(button:GetFullName(), 'Button_Resume') then
                     local status_text = "RESUME - MATT'S MOD\n"
-                    status_text = status_text .. "F1: No stone cooldown (" .. (mod_state.no_stone_cooldown and "ON" or "OFF") .. ")\n"
+                    status_text = status_text ..
+                    "F1: No stone cooldown (" .. (mod_state.no_stone_cooldown and "ON" or "OFF") .. ")\n"
                     status_text = status_text ..
                         "F2: Super stone form (" .. (mod_state.super_stone_form and "ON" or "OFF") .. ")\n"
                     status_text = status_text .. "F3: Walk fast (" .. (mod_state.walk_fast and "ON" or "OFF") .. ")\n"
                     status_text = status_text ..
                         "F4: Super stamina (" .. (mod_state.super_stamina and "ON" or "OFF") .. ")\n"
-                    status_text = status_text .. "F5: Max resolve (" .. (mod_state.max_resolve and "ON" or "OFF") .. ")\n"
+                    status_text = status_text ..
+                    "F5: Max resolve (" .. (mod_state.max_resolve and "ON" or "OFF") .. ")\n"
                     status_text = status_text ..
                         "F6: Enhanced parry (" .. (mod_state.enhanced_parry and "ON" or "OFF") .. ")\n"
                     status_text = status_text .. "F7: ALL mods toggle\n"
-                    status_text = status_text .. "F8: God mode (ENGINE)\n"
+                    status_text = status_text .. "F8: God mode (" .. (mod_state.god_mode and "ON" or "OFF") .. ")\n"
+                    status_text = status_text .. "F9: Max out inventory\n"
                     status_text = status_text .. "PAGE_UP: Show detailed status\n"
                     status_text = status_text .. "NUM_LOCK: Unlock all shells\n"
                     status_text = status_text ..
@@ -103,7 +115,6 @@ local function toggle_super_stone_form_max()
         player.SuperStoneForm_Duration = 0
     end
     update_button_text()
-
 end
 
 local function max_resolve()
@@ -157,7 +168,6 @@ local function toggle_super_stamina()
         player.StaminaCostModifier = 1
     end
     update_button_text()
-
 end
 
 local function toggle_enhanced_parry_chance()
@@ -167,7 +177,6 @@ local function toggle_enhanced_parry_chance()
         return
     end
 
-    print('Player found: ' .. player:GetFullName())
     -- infinite stone form
     mod_state.enhanced_parry = not mod_state.enhanced_parry
     if mod_state.enhanced_parry then
@@ -178,7 +187,6 @@ local function toggle_enhanced_parry_chance()
         player.EnhancedParry_Chance = 0
     end
     update_button_text()
-
 end
 
 
@@ -187,12 +195,12 @@ local function toggle_god_mode()
     local cheat_manager = FindFirstOf('CheatManager')
     if cheat_manager then
         print('Toggling God Mode')
+        mod_state.god_mode = not mod_state.god_mode
         cheat_manager:God()
     else
         print('CheatManager not found - try again when in-game')
     end
     update_button_text()
-
 end
 
 local function show_status()
@@ -249,7 +257,6 @@ local function toggle_matts_mods()
         print('------------------------------------------------------------------------------------------------')
     end
     update_button_text()
-
 end
 
 local function max_out_inventory()
@@ -286,6 +293,28 @@ local function unlock_all_shells()
     print('Unlocking All Shells for player')
     player:DH_UnlockAllShells()
 end
+
+local function unlock_all_player_funcs()
+    local player = UEHelpers.GetPlayer()
+    if not player then
+        print('Player not found - try again when in-game')
+        return
+    end
+
+    print('Player found: ' .. player:GetFullName())
+    print('Unlocking All Shells for player')
+    player:DH_UnlockAllShells()
+    print('Unlocking All Shells Names for player')
+    player:DH_UnlockAllShellsName()
+    print('Unlocking All Weapons for player')
+    player:DH_UnlockAllWeapons()
+    print('Unlocking All Riposte for player')
+    player:DH_UnlockAllRiposte()
+    print('Activating Inactive Unlocked Shell Abilities for player')
+    player:DH_ActivateInactiveUnlockedShellAbilities()
+
+end
+
 
 local function exploit_inventory_and_unlock_fast_travel_locations()
     -- INFINITE UPGRADES
@@ -325,6 +354,12 @@ local function exploit_inventory_and_unlock_fast_travel_locations()
         end)
 end
 
+local function summon_weapon_from_keybind(weapon_id)
+    local player = UEHelpers.GetPlayer()
+    print('SUMMON WEAPON: ' .. weapon_map[weapon_id])
+
+    player:SummonWeapon(weapon_id)
+end
 
 RegisterKeyBind(Key.F1, {}, stone_form_no_cooldown)
 RegisterKeyBind(Key.F2, {}, toggle_super_stone_form_max)
@@ -340,6 +375,14 @@ RegisterKeyBind(Key.NUM_LOCK, {}, unlock_all_shells)
 RegisterKeyBind(Key.PAGE_DOWN, {}, exploit_inventory_and_unlock_fast_travel_locations)
 RegisterKeyBind(Key.HOME, {}, always_allow_fast_travel)
 RegisterKeyBind(Key.CAPS_LOCK, {}, enable_matts_notes)
+RegisterKeyBind(Key.BACKSPACE, {}, unlock_all_player_funcs)
+RegisterKeyBind(Key.ONE, {}, function() summon_weapon_from_keybind(0) end)
+RegisterKeyBind(Key.TWO, {}, function() summon_weapon_from_keybind(1) end)
+RegisterKeyBind(Key.THREE, {}, function() summon_weapon_from_keybind(2) end)
+RegisterKeyBind(Key.FOUR, {}, function() summon_weapon_from_keybind(3) end)
+RegisterKeyBind(Key.FIVE, {}, function() summon_weapon_from_keybind(4) end)
+RegisterKeyBind(Key.SIX, {}, function() summon_weapon_from_keybind(5) end)
+
 
 local function matts_mod_help(FullCommand, Parameters, Ar)
     print('todo: help message for hotkeys')
@@ -360,6 +403,5 @@ local function matts_mod_help(FullCommand, Parameters, Ar)
     Utils.Log(Ar, '--------------------------------')
     return true
 end
-
 
 RegisterConsoleCommandHandler("matts_mod_help", matts_mod_help)
