@@ -24,6 +24,7 @@ Perfect for veterans wanting to experience the game differently, newcomers needi
 - **Resolve Management** - Unlimited resolve with no drain
 - **One-Hit Kills** - Developer testing feature for rapid progression
 - **Instant Weapon Switching** - Hotkey access to all weapons (1-6) regardless of unlock status
+- **Super Ballistazooka** - Transform the slow ranged weapon into a machine gun (5.7s reload → 0.01s)
 
 ### 🏃‍♂️ Movement & Exploration
 - **Super Speed Walking** - 5x movement speed for faster exploration
@@ -87,6 +88,7 @@ PAGE_DOWN   -- Enable unlimited upgrades + unlock fast travel
 HOME        -- Enable anti-softlock (always allow ornate mask)
 CAPS_LOCK   -- Toggle dynamic status dashboard in pause menu
 BACKSPACE   -- Unlock ALL shells, shell names, weapons, and riposte abilities
+Tab         -- Super Ballistazooka (machine gun mode)
 
 -- Instant Weapon Switching (works even if weapon not unlocked)
 1           -- Summon Hallowed Sword
@@ -137,6 +139,22 @@ summon_weapon <id>          -- Summon specific weapon by ID (0-5)
 | **4** | Martyr's Blade | Summon Tarsus's weapon | ⚔️ Works without unlock |
 | **5** | Axatana Twin Blades | Summon Imrod's twin blades | 🗡️🗡️ Works without unlock |
 | **6** | Axatana Axe | Summon Imrod's axe form | 🪓 Works without unlock |
+
+### Weapon Enhancement System
+| Hotkey | Feature | Description | Power Level |
+|--------|---------|-------------|-------------|
+| **Tab** | Super Ballistazooka | Machine gun mode - 5.7s reload → 0.01s | 🔥🔥🔥 Game Breaking |
+
+**Combo Recommendation:** Use `F9` (Max Inventory) first to get 999 arrows, then `Tab` for unlimited rapid-fire destruction!
+
+**Technical Achievement:** This feature demonstrates advanced UE4 animation system manipulation by targeting **5 separate animation montages** that control ballistazooka timing:
+- `Balista_Reload_Montage` - Main reload sequence (5.7s → 0.01s)  
+- `Ballista_Equip_Montage` - Weapon equipping animation
+- `Ballista_Idle_To_Aim` - Transition from idle to aiming
+- `Ballista_Idle_To_Reload` - Transition from idle to reload  
+- `Ballista_Equip_InstantReload_Montage` - Special instant reload variant
+
+The result: A weapon that goes from **10 shots per minute** to **6000+ shots per minute** - a **570x improvement**!
 
 ### Utility & Information
 | Hotkey | Feature | Description | Notes |

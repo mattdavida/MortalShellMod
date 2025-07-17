@@ -12,6 +12,7 @@ print('PAGE_UP: Show mod status')
 print('NUM_LOCK: Unlock all shells')
 print('PAGE_DOWN: Exploit inventory ( no cost for items / upgrades ) + unlock ALL fast travel locations')
 print('HOME: Always allow fast travel with ornate mask')
+print('B: Super Ballistazooka (machine gun mode)')
 print('----------------------------------------------------------')
 local UEHelpers = require('UEHelpers.UeHelpers')
 local Utils = require('Utils.Utils')
@@ -312,6 +313,8 @@ local function unlock_all_player_funcs()
     player:DH_UnlockAllRiposte()
     print('Activating Inactive Unlocked Shell Abilities for player')
     player:DH_ActivateInactiveUnlockedShellAbilities()
+    print('Unlocking Ballistazooka for player')
+    player:DH_UnlockBallistazooka()
 
 end
 
@@ -361,6 +364,29 @@ local function summon_weapon_from_keybind(weapon_id)
     player:SummonWeapon(weapon_id)
 end
 
+
+local function super_ballistazooka()
+    local anim_montage = StaticFindObject('/Game/MainChar/anims/shooting/Char_anims/Balista_Reload_Montage.Balista_Reload_Montage')
+    local equip_montage = StaticFindObject('/Game/MainChar/anims/shooting/Char_anims/Ballista_Equip_Montage.Ballista_Equip_Montage')
+    local idle_to_aim = StaticFindObject('/Game/MainChar/anims/shooting/Char_anims/Ballista_Idle_To_Aim.Ballista_Idle_To_Aim')
+    local idle_to_reload = StaticFindObject('/Game/MainChar/anims/shooting/Char_anims/Ballista_Idle_To_Reload.Ballista_Idle_To_Reload')
+    local equip_instant_reload = StaticFindObject('/Game/MainChar/anims/shooting/Char_anims/Ballista_Equip_InstantReload_Montage.Ballista_Equip_InstantReload_Montage')
+    if anim_montage then
+        print('Anim Montage found: ' .. tostring(anim_montage:GetFullName()))
+        print('original length: ' .. tostring(anim_montage.SequenceLength))
+        --  original length: 5.7333331108093
+        anim_montage.SequenceLength = 0.01
+        equip_montage.SequenceLength = 0.01
+        idle_to_aim.SequenceLength = 0.01
+        idle_to_reload.SequenceLength = 0.01
+        equip_instant_reload.SequenceLength = 0.01
+    else
+        print('Anim Montage not found')
+    end
+end
+
+
+
 RegisterKeyBind(Key.F1, {}, stone_form_no_cooldown)
 RegisterKeyBind(Key.F2, {}, toggle_super_stone_form_max)
 RegisterKeyBind(Key.F3, {}, toggle_walk_fast)
@@ -376,6 +402,7 @@ RegisterKeyBind(Key.PAGE_DOWN, {}, exploit_inventory_and_unlock_fast_travel_loca
 RegisterKeyBind(Key.HOME, {}, always_allow_fast_travel)
 RegisterKeyBind(Key.CAPS_LOCK, {}, enable_matts_notes)
 RegisterKeyBind(Key.BACKSPACE, {}, unlock_all_player_funcs)
+RegisterKeyBind(Key.TAB, {}, super_ballistazooka)
 RegisterKeyBind(Key.ONE, {}, function() summon_weapon_from_keybind(0) end)
 RegisterKeyBind(Key.TWO, {}, function() summon_weapon_from_keybind(1) end)
 RegisterKeyBind(Key.THREE, {}, function() summon_weapon_from_keybind(2) end)
