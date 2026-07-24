@@ -1,285 +1,300 @@
-# MattsMod - Ultimate Enhancement Suite for Mortal Shell
+# Mortal Shell Mod - Ultimate Enhancement Suite
 
-**Complete gameplay enhancement with cheats, unlocks, and quality-of-life improvements for Mortal Shell**
+**Complete gameplay enhancement with a full in-game GUI, cheats, unlocks, and quality-of-life improvements for Mortal Shell**
 
 [![Lua](https://img.shields.io/badge/language-Lua-blue.svg)](https://www.lua.org/)
 [![UE4SS](https://img.shields.io/badge/framework-UE4SS-green.svg)](https://github.com/UE4SS-RE/RE-UE4SS)
 [![Game](https://img.shields.io/badge/game-Mortal%20Shell-darkred.svg)](https://mortalshell.com/)
 
-![Dynamic Status Dashboard](https://github.com/user-attachments/assets/63c870be-1818-4774-9b42-53a5c44dda88)
-*Dynamic status dashboard showing real-time mod status integrated into the pause menu - press CAPS_LOCK to toggle*
+![In-game GUI panel](https://github.com/user-attachments/assets/63c870be-1818-4774-9b42-53a5c44dda88)
+*Full in-game GUI panel with a live toggle status dashboard, inside the UE4SS debug panel (open with INSERT)*
 
 ## 🎯 Overview
 
-MattsMod is a **comprehensive UE4SS-based modification** for Mortal Shell, souls-like that's seeing renewed interest ( for me ) with the announcement of Mortal Shell 2. This mod provides extensive gameplay enhancements, shell unlocks, combat modifications, and quality-of-life improvements through intuitive hotkeys and powerful behind-the-scenes hooks.
+MortalShellMod is a **comprehensive UE4SS-based modification** for Mortal Shell, featuring a full ImGui interface directly inside the UE4SS debug panel. No more memorizing hotkeys or console commands — everything is accessible through an organized, scrollable GUI with live status indicators.
 
-Perfect for veterans wanting to experience the game differently, newcomers needing assistance, or anyone wanting to explore all content without the traditional grind and have a little fun.
+Timed with renewed interest ahead of Mortal Shell 2. Perfect for veterans wanting to experience the game differently, newcomers needing assistance, or anyone wanting to explore all content without the grind.
 
-## ✨ Key Features
+**Highlights:**
+- Full in-game GUI panel with live toggle status dashboard
+- Mods automatically re-apply ~4 seconds after you respawn — no manual re-enabling needed after death
+- Walk speed is adjustable via slider (1x–10x) before toggling
+- All features also available as console commands and optional hotkeys
 
-### ⚔️ Combat Enhancement System
-- **Stone Form Mastery** - Remove cooldowns and enable super stone form with massive duration
-- **Enhanced Parry System** - 100% enhanced parry chance when activated
-- **God Mode Toggle** - Complete invulnerability via UE4 cheat system
-- **Resolve Management** - Unlimited resolve with no drain
-- **One-Hit Kills** - Developer testing feature for rapid progression
-- **Instant Weapon Switching** - Hotkey access to all weapons (1-6) regardless of unlock status
-- **Super Ballistazooka** - Transform the slow ranged weapon into a machine gun (5.7s reload → 0.01s)
+## 🚀 Installation
 
-### 🏃‍♂️ Movement & Exploration
-- **Super Speed Walking** - 5x movement speed for faster exploration
-- **Unlimited Stamina** - Zero stamina cost for all actions
-- **Fast Travel Unlock** - Instant access to all teleport locations
-- **Anti-Softlock System** - Always allow ornate mask usage to prevent getting stuck
-- **Shell Unlocking** - Unlock all shells immediately
+### Requirements
+- **[UE4SS experimental-latest (zDev build)](https://github.com/UE4SS-RE/RE-UE4SS/releases)**
+- Mortal Shell (Steam / Epic Games / GOG)
 
-### 🎒 Inventory & Progression
-- **Inventory Maximization** - Set all stackable items to maximum capacity
-- **Unlimited Upgrades** - Zero cost for all shell upgrades and abilities
-- **Infinite Currency** - Unlimited tar and glimpses for purchases
-- **Complete Unlock System** - Unlock all shells, shell names, weapons, and riposte abilities instantly
-- **Smart Exploit System** - Hook-based modification for seamless experience
+> ⚠️ **This mod requires the experimental/zDev UE4SS build.** Stable releases will not work due to ABI differences.
 
-### 🔧 User Experience
-- **Hotkey System** - F1-F9 + special keys for instant access
-- **Status Display** - Real-time mod state monitoring
-- **Dynamic Status Dashboard** - Live mod status in pause menu Resume button
-- **Smart Toggles** - Individual control over each enhancement
-- **Console Integration** - Help command and professional logging
+### Steps
+1. **Install UE4SS**
+   - Download the latest UE4SS experimental/zDev release
+   - Extract to `..\Mortal Shell\Dungeonhaven\Binaries\Win64\`
+2. **Install MortalShellMod**
+   - Download and extract the mod files
+   - Place the `MortalShellMod` folder in `..\Win64\ue4ss\Mods\MortalShellMod\`
+3. **Enable the mod**
+   - Open `..\Win64\ue4ss\Mods\mods.txt`
+   - Add the line: `MortalShellMod : 1`
+4. **Launch the game**
+   - Open the UE4SS debug panel (**INSERT** key by default)
+   - Click the **"Mortal Shell Mod"** tab
+   - All features are accessible from there
 
-## 🚀 Quick Start
-
-### Prerequisites
-- **[UE4SS for Unreal Engine 4](https://github.com/UE4SS-RE/RE-UE4SS)** - Install the latest UE4SS release
-- Mortal Shell (Steam/Epic Games/GOG)
-
-
-### Installation
-1. **Install UE4SS** in your Mortal Shell game directory
-   - Download latest UE4SS release
-   - Extract to `Mortal Shell/Binaries/Win64/`
-   - Ensure `UE4SS.dll` is in the Win64 folder
-2. **Download MattsMod**
-   - Clone or download this repository
-   - Place in `Mortal Shell/Binaries/Win64/ue4ss/Mods/MattsMod/`
-3. **Install Shared Framework**
-   - Download from [UE4SS_Lua_Utils](https://github.com/mattdavida/UE4SS_Lua_Utils)
-   - Place contents in `Mortal Shell/Binaries/Win64/ue4ss/Mods/shared/`
-4. **Configure UE4SS**
-   - Add `MattsMod: 1` to your `mods.txt` file
-   - Ensure console is enabled in UE4SS settings
-5. **Launch the game** - Mod will auto-initialize with welcome message
-
-### Basic Usage
-```lua
--- Hotkeys (in-game)
-F1          -- Remove stone form cooldown
-F2          -- Toggle super stone form (1,000,000 duration)
-F3          -- Toggle 5x walk speed
-F4          -- Toggle unlimited stamina
-F5          -- Max resolve (1,000,000)
-F6          -- Toggle 100% enhanced parry chance
-F7          -- Enable ALL Matt's mods at once
-F8          -- Toggle god mode (invulnerability)
-F9          -- Max out all inventory items
-PAGE_UP     -- Show current mod status
-NUM_LOCK    -- Unlock all shells
-PAGE_DOWN   -- Enable unlimited upgrades + unlock fast travel
-HOME        -- Enable anti-softlock (always allow ornate mask)
-CAPS_LOCK   -- Toggle dynamic status dashboard in pause menu
-BACKSPACE   -- Unlock ALL shells, shell names, weapons, and riposte abilities
-Tab         -- Super Ballistazooka (machine gun mode)
-
--- Instant Weapon Switching (works even if weapon not unlocked)
-1           -- Summon Hallowed Sword
-2           -- Summon Smoldering Mace
-3           -- Summon Hammer and Chisel
-4           -- Summon Martyr's Blade
-5           -- Summon Axatana twin blades
-6           -- Summon Axatana axe
-
--- Console Commands (press ~ or console key)
-matts_mod_help              -- Show all available hotkeys
-summon_weapon <id>          -- Summon specific weapon by ID (0-5)
-```
-
-## 📋 Features Reference
-
-### Core Combat Modifications
-| Hotkey | Feature | Description | Toggle |
-|--------|---------|-------------|--------|
-| **F1** | Stone Form Cooldown | Sets cooldown to 0 for instant reuse | ❌ One-time |
-| **F2** | Super Stone Form | 1,000,000 duration + always super | ✅ Toggle |
-| **F4** | Super Stamina | Zero stamina cost for all actions | ✅ Toggle |
-| **F5** | Max Resolve | Sets resolve to 1,000,000 with no drain | ❌ One-time |
-| **F6** | Enhanced Parry | 100% enhanced parry chance | ✅ Toggle |
-| **F8** | God Mode | Complete invulnerability via UE4 cheats | ❌ Engine toggle |
-
-### Movement & Exploration
-| Hotkey | Feature | Description | Toggle |
-|--------|---------|-------------|--------|
-| **F3** | Walk Fast | 5x movement speed modifier | ✅ Toggle |
-| **PAGE_DOWN** | Fast Travel Unlock | Unlock all teleport locations | ❌ Permanent |
-| **HOME** | Anti-Softlock | Always allow ornate mask usage (prevents getting stuck after boss fights) | ❌ Hook-based |
-
-### Inventory & Progression
-| Hotkey | Feature | Description | Toggle |
-|--------|---------|-------------|--------|
-| **F9** | Max Inventory | Set all stackable items to max capacity | ❌ One-time |
-| **NUM_LOCK** | Unlock Shells | Unlock all shells via game function | ❌ One-time |
-| **BACKSPACE** | Unlock Everything | Unlock all shells, shell names, weapons, riposte abilities | ❌ One-time |
-| **PAGE_DOWN** | Unlimited Upgrades | Zero cost upgrades + infinite currency | ❌ Hook-based |
-
-### Instant Weapon Access
-| Hotkey | Weapon | Description | Notes |
-|--------|--------|-------------|-------|
-| **1** | Hallowed Sword | Summon starting weapon | 🗡️ Works without unlock |
-| **2** | Smoldering Mace | Summon Hadern's weapon | 🔥 Works without unlock |
-| **3** | Hammer and Chisel | Summon Crucix's weapon | 🔨 Works without unlock |
-| **4** | Martyr's Blade | Summon Tarsus's weapon | ⚔️ Works without unlock |
-| **5** | Axatana Twin Blades | Summon Imrod's twin blades | 🗡️🗡️ Works without unlock |
-| **6** | Axatana Axe | Summon Imrod's axe form | 🪓 Works without unlock |
-
-### Weapon Enhancement System
-| Hotkey | Feature | Description | Power Level |
-|--------|---------|-------------|-------------|
-| **Tab** | Super Ballistazooka | Machine gun mode - 5.7s reload → 0.01s | 🔥🔥🔥 Game Breaking |
-
-**Combo Recommendation:** Use `F9` (Max Inventory) first to get 999 arrows, then `Tab` for unlimited rapid-fire destruction!
-
-**Technical Achievement:** This feature demonstrates advanced UE4 animation system manipulation by targeting **5 separate animation montages** that control ballistazooka timing:
-- `Balista_Reload_Montage` - Main reload sequence (5.7s → 0.01s)  
-- `Ballista_Equip_Montage` - Weapon equipping animation
-- `Ballista_Idle_To_Aim` - Transition from idle to aiming
-- `Ballista_Idle_To_Reload` - Transition from idle to reload  
-- `Ballista_Equip_InstantReload_Montage` - Special instant reload variant
-
-The result: A weapon that goes from **10 shots per minute** to **6000+ shots per minute** - a **570x improvement**!
-
-### Utility & Information
-| Hotkey | Feature | Description | Notes |
-|--------|---------|-------------|-------|
-| **F7** | Matt's Mods ALL | Activates F1,F3,F4,F5,F6 + one-hit kill | ⚠️ See warnings |
-| **PAGE_UP** | Status Display | Shows current state of all toggles | ℹ️ Information |
-| **CAPS_LOCK** | Dynamic Status Dashboard | Transforms pause menu Resume button into live mod status display | 🎯 UI Enhancement |
-
-## ⚠️ Important Warnings & Limitations
-
-### Permanent Effects
-Some modifications **cannot be toggled off** and require area transitions to reset:
+Final layout should look like:
 
 ```
-⚠️  PERMANENT UNTIL AREA CHANGE:
-• Stone Form Cooldown (F1) - Cannot be restored
-• One-Hit Kill (F7 component) - Cannot be disabled
-• Must travel to new area to reset these effects
+Win64/
+  ue4ss/
+    Mods/
+      MortalShellMod/
+        dlls/
+          main.dll
+        Scripts/
+          main.lua
+          cheat_utils.lua
+          weapon_mod.lua
+          Utils.lua
+        readme.txt
 ```
 
-### Smart Usage Tips
-- **Use F7 carefully** - Combines multiple effects including permanent ones
-- **Save before experimenting** - Some effects persist until area change
-- **Check status regularly** - Use PAGE_UP to monitor active modifications or CAPS_LOCK for visual dashboard
-- **Dynamic dashboard** - CAPS_LOCK transforms pause menu Resume button into live status display with all mod states
-- **God mode is engine-level** - Managed by UE4 cheat system, not mod state
+## 🖥️ GUI Overview
 
-## 🏗️ Technical Implementation
+The mod adds a single scrollable **"Mortal Shell Mod"** tab to the UE4SS panel.
 
-### Hook-Based Architecture
-The mod uses UE4SS hooks for seamless integration:
+**Status Bar** (always visible)
+> Walk Fast • Super Stamina • Super Stone • Enhanced Parry • God Mode • All Mods
 
-```lua
--- Unlimited Upgrades - Cost Override
-RegisterHook('/Game/UI/Blueprints/Waifu/UI_ShellUpgradeMenu.UI_ShellUpgradeMenu_C:SetCanBuy', 
-    function(self, other)
-        local obj = self:get()
-        obj.CanBuy = true
-        obj.Tar_Cost = 0
-        obj.Glimpses_Cost = 0
-    end)
+### One-Time Actions
+- **Stone Form No Cooldown** — removes cooldown for this area
+- **Max Resolve** — sets resolve to 1,000,000 with no drain
+- **Max Out Inventory** — fills all stackable items to max
+- **Unlock All Shells** — unlocks all shells
+- **Max Out Bolts** — fills Large Bolt stack to 999
+- **Super Ballistazooka** — removes all reload/equip animations permanently
 
--- Infinite Currency - Return Override  
-RegisterHook('/Game/UI/Blueprints/Merchant/UI_MerchantPanelNew.UI_MerchantPanelNew_C:GetPlayerCurrency',
-    function(self, other)
-        return 9999
-    end)
+### Toggle Features
+- **Walk Speed Slider** (1x–10x, default 2x)
+- **Toggle Walk Fast** — applies speed modifier in a continuous loop
+- **Toggle Super Stamina** — zero stamina cost
+- **Toggle Super Stone Form** — 1,000,000 duration super stone form
+- **Toggle Enhanced Parry** — 1000% enhanced parry chance
+- **Toggle God Mode** — engine-level invulnerability
 
--- Fast Travel Unlock - Access Override
-RegisterHook('/Game/UI/Blueprints/Waifu/UI_FastTravel.UI_FastTravel_C:GetIsUnlocked',
-    function(self, other)
-        return true
-    end)
+### Advanced Features
+- **Toggle All Mods (F7)** — fires everything at once (see warnings)
+- **Always Allow Fast Travel** — anti-softlock for ornate mask
+- **Unlock All Player Funcs** — shells, weapons, ripostes, ballistazooka
+- **Exploit Inventory** — zero-cost upgrades + infinite currency
+- **Open All Fast Travels** — unlocks all fast travel locations
+- **Max All Familiarity** — reveals full item descriptions instantly
+- **Add All Consumables** — adds every consumable to inventory
+- **Unlock All Item Entries** — reveals full codex / item encyclopedia
+- **Unlock All Tutorials** — marks all tutorials as seen
 
--- Anti-Softlock System - Item Usage Override
-RegisterHook('/Game/Blueprints/GamePlay/GameplayPC.GameplayPC_C:InventoryUtil_GetCanUseItem',
-    function(self, ID, UsableInDarkForm)
-        if ID:get():ToString() == 'Mask_Ornate' then
-            return 11  -- Always allow ornate mask usage (prevents post-boss softlocks)
-        end
-    end)
+### Combat & Enemies
+Enemy control, farming, and world settings.
 
--- Dynamic Status Dashboard - UI Text Override
-local function update_button_text()
-    local buttons = FindAllOf('UI_MainMenu_Button_C')
-    if buttons then
-        for _, button in ipairs(buttons) do
-            if Utils.StringContains(button:GetFullName(), 'Button_Resume') then
-                local status_text = "RESUME - MATT'S MOD\n"
-                status_text = status_text .. "F2: Super stone form (" .. (mod_state.super_stone_form and "ON" or "OFF") .. ")\n"
-                status_text = status_text .. "F3: Walk fast (" .. (mod_state.walk_fast and "ON" or "OFF") .. ")\n"
-                -- ... (full status display with all features)
-                button.Text_Value = FText(status_text)
-                button.Button_Width = 1040
-                button.FontSize = 25
-            end
-        end
-    end
-end
+*Toggles:*
+- **Toggle One Hit Kill** — any enemy that spawns is instantly hit for near-fatal damage; also nukes all currently loaded enemies when enabled. Persists through death until toggled off.
+- **Toggle Fog** — full effects unknown. A visible fog briefly covers the screen, and some enemies spawn multiple times (once per press of Toggle Fog). An internal on/off appears to happen and state resets somewhere — unconfirmed.
+
+*Actions:*
+- **Hit All Spawned Enemies** — instantly hits every currently loaded enemy for near-fatal damage. One-shot; pair with One Hit Kill to auto-clear new spawns.
+- **Spawn More Enemies** — respawns nearby enemy spawners; good for farming or testing.
+- **Enable Passive Tar & Glimpses** — every enemy that spawns drops Tar and Glimpses to you automatically. One-time enable; stays active for the session.
+
+### Weapons
+Summon any of the 6 weapons instantly, bypassing weapon racks.
+
+### Keybinds
+Enable Player Keybinds, Enable Weapon Keybinds — plus a full key reference.
+
+## 💀 Auto Re-Enable After Death
+
+When you die and respawn, the mod detects the new player object and automatically re-fires all mods that were active — approximately **4 seconds** after the player spawns. This means you don't need to manually re-enable anything after dying.
+
+- If **Toggle All Mods (F7)** was active, the full suite re-enables.
+- Individual toggles (god mode, walk fast, etc.) re-enable separately if they were on independently.
+- **Stone Form cooldown cannot be re-applied this way** — it resets on area load.
+
+## ⌨️ Hotkeys (opt-in)
+
+Hotkeys are **NOT** active by default. Enable them via the Keybinds section in the GUI, or run:
+- `enable_mortal_shell_mod_keybinds` (player keys)
+- `enable_weapon_mod_keybinds` (weapon keys)
+
+### Player Hotkeys
+| Key | Feature |
+|-----|---------|
+| **F1** | Remove stone form cooldown (one-time) |
+| **F2** | Toggle super stone form |
+| **F3** | Toggle walk fast (uses current slider value, default 2x) |
+| **F4** | Toggle unlimited stamina |
+| **F5** | Max resolve (one-time) |
+| **F6** | Toggle enhanced parry (1000%) |
+| **F7** | Toggle all mods at once (see warnings) |
+| **F8** | Toggle god mode |
+| **F9** | Max out all inventory items |
+| **PAGE_UP** | Show current mod status in console |
+| **NUM_LOCK** | Unlock all shells |
+| **PAGE_DOWN** | Exploit inventory (zero-cost upgrades + infinite currency) |
+| **HOME** | Always allow fast travel (anti-softlock) |
+| **BACKSPACE** | Unlock all player functions |
+
+### Weapon Hotkeys
+| Key | Weapon / Action |
+|-----|-----------------|
+| **3** | Max out bolts |
+| **4** | Super ballistazooka |
+| **5** | Hallowed Sword |
+| **6** | Smoldering Mace |
+| **7** | Hammer and Chisel |
+| **8** | Martyr's Blade |
+| **9** | Axatana Twin Blades |
+| **0** | Axatana Axe |
+
+## 🎮 Console Commands
+
+Open the console with **F10**, then type any command below.
+
+```
+mortal_shell_mod                               -- List all commands
 ```
 
-### Error Handling & User Experience
-Professional error handling with helpful messages:
-
-```lua
-local function stone_form_no_cooldown()
-    local player = UEHelpers.GetPlayer()
-    if not player then 
-        print('Player not found - try again when in-game')
-        return 
-    end
-    print('Setting Player Stone Form Cooldown to 0')
-    player.StoneFormCooldown = 0
-end
+**Combat**
+```
+stone_form_no_cooldown                         -- Remove stone form cooldown
+toggle_super_stone_form_max                    -- Toggle super stone form
+toggle_super_stamina                           -- Toggle zero stamina cost
+max_resolve                                    -- Max resolve, no drain
+toggle_enhanced_parry_chance                   -- Toggle enhanced parry (1000%)
+toggle_god_mode                                -- Toggle invulnerability
 ```
 
-### State Management
-Consolidated toggle state tracking:
-
-```lua
-local mod_state = {
-    super_stone_form = false,
-    walk_fast = false,
-    super_stamina = false,
-    enhanced_parry = false
-}
+**Movement**
 ```
+toggle_walk_fast                               -- Toggle walk speed (GUI slider value)
+```
+
+**Inventory & Progression**
+```
+max_out_inventory                              -- Max all stackable items
+unlock_all_shells                              -- Unlock all shells
+unlock_all_player_funcs                        -- Unlock shells, weapons, ripostes, abilities, ballistazooka
+exploit_inventory                              -- Zero-cost upgrades + infinite currency
+enable_all_fast_travels                        -- Unlock all fast travel locations
+always_allow_fast_travel                       -- Always allow ornate mask usage
+max_all_familiarity                            -- Reveal full descriptions for all items
+add_all_consumables                            -- Add every consumable to inventory
+unlock_all_item_entries                        -- Reveal full item codex
+unlock_all_tutorials                           -- Mark all tutorials as seen
+```
+
+**Weapons**
+```
+max_out_bolts                                  -- Fill large bolt stack to max
+super_b                                        -- Super ballistazooka mode
+summon_weapon <0-5>                            -- Summon weapon by ID:
+                                               --   0=Hallowed Sword  1=Smoldering Mace
+                                               --   2=Hammer & Chisel 3=Martyr's Blade
+                                               --   4=Axatana (twin)  5=Axatana (axe)
+```
+
+**Combat & Enemies**
+```
+one_hit_kill                                   -- Toggle: instantly hit all loaded and newly
+                                               --   spawned enemies for near-fatal damage
+                                               --   (persists through death)
+hit_enemies                                    -- Hit all currently loaded enemies once
+more_enemies                                   -- Respawn nearby enemy spawners (farming)
+passive_tar                                    -- Newly spawned enemies auto-drop tar and glimpses
+toggle_fog                                     -- Toggle fog (effects unconfirmed)
+```
+
+**Utility**
+```
+toggle_mods                                    -- Toggle all core mods at once
+show_status                                    -- Print toggle states to console
+```
+
+## ⚠️ Important Warnings
+
+### Permanent Effects (until area transition)
+- **Stone Form Cooldown** (`F1` / `stone_form_no_cooldown`) — once removed, stays removed until you load a new area. This is the only effect that cannot be re-applied automatically on respawn.
+
+### Toggle All Mods / F7
+Chains together: `stone_form_no_cooldown`, `toggle_walk_fast`, `toggle_super_stamina`, `max_resolve`, `toggle_enhanced_parry_chance`, `always_allow_fast_travel`, god mode, super ballistazooka, and max bolts.
+
+Stone cooldown persists until area transition — all other effects re-enable on respawn.
+
+### God Mode Note
+Managed by UE4's built-in CheatManager, not mod state directly. The status indicator tracks intent; the engine manages the actual effect.
+
+## 🔧 Super Ballistazooka — Technical Note
+
+This feature demonstrates advanced UE4 animation-system manipulation by targeting **5 separate animation montages** that control ballistazooka timing:
+- `Balista_Reload_Montage` — main reload sequence (5.73s → 0.01s)
+- `Ballista_Equip_Montage` — weapon equipping animation
+- `Ballista_Idle_To_Aim` — transition from idle to aiming
+- `Ballista_Idle_To_Reload` — transition from idle to reload
+- `Ballista_Equip_InstantReload_Montage` — special instant reload variant
+
+**Combo tip:** Use `Max Out Bolts` first to get 999 arrows, then Super Ballistazooka for rapid-fire destruction.
+
+## 🛠️ Troubleshooting
+
+**Mod not loading?**
+- Verify `mods.txt` has `MortalShellMod : 1` (exact spelling)
+- Confirm UE4SS files are in the Win64 folder
+- Requires experimental/zDev UE4SS — stable releases will not work
+
+**GUI tab not appearing?**
+- Make sure both `dlls/main.dll` and the `Scripts` folder are present
+- Check the UE4SS console for error messages on startup
+
+**Console not opening?**
+- Default key is F10; check UE4SS settings if remapped
+
+**Hotkeys not responding?**
+- Use the "Enable Player Keybinds" button in the Keybinds section of the GUI, or run `enable_mortal_shell_mod_keybinds` in console
+- Hotkeys only work while fully loaded in-game (not in menus)
+
+**"Player not found" errors?**
+- You must be fully loaded into a game session, not on the main menu
+
+**Mods not re-enabling after death?**
+- The auto-re-enable fires ~4 seconds after respawn
+- Only applies to mods that were active before death
+- Does not apply if Toggle All Mods was not active and no individual toggles were on
 
 ## 📁 File Structure
 
 ```
-MattsMod/
+MortalShellMod/
+├── dlls/
+│   └── main.dll                # GUI panel (ImGui) native component
 ├── Scripts/
-│   └── main.lua                # Core mod implementation (286 lines)
+│   ├── main.lua                # Console command + keybind registration
+│   ├── cheat_utils.lua         # Core cheat/mod implementations + auto re-enable
+│   ├── weapon_mod.lua          # Weapon summoning, bolts, super ballistazooka
+│   └── Utils.lua               # Shared helper utilities
+├── readme.txt                  # Plain-text documentation
 └── README.md                   # This documentation
 ```
 
-## ⚖️ License
+## ⚖️ License & Dependencies
 
 This project is shared freely for educational and personal use. The code demonstrates game modding techniques and serves as a foundation for the Mortal Shell modding community.
 
 **Dependencies:**
-- **UE4SS**: Open source UE4 scripting system
-- **Shared Framework**: Custom utilities for UE4SS development
+- **UE4SS (experimental/zDev)** — Required. https://github.com/UE4SS-RE/RE-UE4SS
+- **UEHelpers** — Shared UE4SS helper library (in `Mods\shared\`)
+- **ImGui** — Bundled with UE4SS, used for the GUI panel
 
 ---
 
-**Built with ❤️ for the Mortal Shell community**  
+**Built with ❤️ for the Mortal Shell community**

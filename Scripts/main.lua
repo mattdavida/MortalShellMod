@@ -1,380 +1,26 @@
-print('----------------------- MATTS MOD -----------------------')
-print('F1: Stone form no cooldown')
-print('F2: Toggle super stone form max')
-print('F3: Toggle walk fast')
-print('F4: Toggle super stamina')
-print('F5: Max resolve')
-print('F6: Toggle enhanced parry chance')
-print('F7: Toggle matts mods')
-print('F8: Toggle god mode')
-print('F9: Max out inventory')
-print('PAGE_UP: Show mod status')
-print('NUM_LOCK: Unlock all shells')
-print('PAGE_DOWN: Exploit inventory ( no cost for items / upgrades ) + unlock ALL fast travel locations')
-print('HOME: Always allow fast travel with ornate mask')
-print('Tab: Super Ballistazooka (machine gun mode)')
-print('----------------------------------------------------------')
-local UEHelpers = require('UEHelpers.UeHelpers')
-local Utils = require('Utils.Utils')
-require('weapon_mod')
 
--- Consolidated mod state
-MOD_STATE = {
-    no_stone_cooldown = false,
-    max_resolve = false,
-    super_stone_form = false,
-    walk_fast = false,
-    super_stamina = false,
-    enhanced_parry = false,
-    enable_matts_notes = false,
-    god_mode = false
-}
+print('----------------------- MORTAL SHELL MOD ENABLED -----------------------')
+print('Use "mortal_shell_mod" to see available commands')
+print("Open console with F10")
 
-function GetModState()
-    return MOD_STATE
-end
+local UEHelpers = require('UEHelpers.UEHelpers')
+local CheatUtils = require('cheat_utils')
+local Utils = require('Utils')
+local WeaponMod = require('weapon_mod')
 
-function UpdateButtonText()
-    if MOD_STATE.enable_matts_notes then
-        print('Overriding Resume Button Text in Pause menu.')
-        print('CAUTION: This will override the default resume button text for the entire game session.')
-        local buttons = FindAllOf('UI_MainMenu_Button_C')
-        local scale_boxes = FindAllOf('ScaleBox')
-        if buttons then
-            for _, button in ipairs(buttons) do
-                if Utils.StringContains(button:GetFullName(), 'Button_Resume') then
-                    local status_text = "RESUME - MATT'S MOD\n"
-                    status_text = status_text ..
-                        "F1: No stone cooldown (" .. (MOD_STATE.no_stone_cooldown and "ON" or "OFF") .. ")\n"
-                    status_text = status_text ..
-                        "F2: Super stone form (" .. (MOD_STATE.super_stone_form and "ON" or "OFF") .. ")\n"
-                    status_text = status_text .. "F3: Walk fast (" .. (MOD_STATE.walk_fast and "ON" or "OFF") .. ")\n"
-                    status_text = status_text ..
-                        "F4: Super stamina (" .. (MOD_STATE.super_stamina and "ON" or "OFF") .. ")\n"
-                    status_text = status_text ..
-                        "F5: Max resolve (" .. (MOD_STATE.max_resolve and "ON" or "OFF") .. ")\n"
-                    status_text = status_text ..
-                        "F6: Enhanced parry (" .. (MOD_STATE.enhanced_parry and "ON" or "OFF") .. ")\n"
-                    status_text = status_text .. "F7: ALL mods toggle\n"
-                    status_text = status_text .. "F8: God mode (" .. (MOD_STATE.god_mode and "ON" or "OFF") .. ")\n"
-                    status_text = status_text .. "F9: Max out inventory\n"
-                    status_text = status_text .. "PAGE_UP: Show detailed status\n"
-                    status_text = status_text .. "NUM_LOCK: Unlock all shells\n"
-                    status_text = status_text ..
-                        "PAGE_DOWN: Exploit inventory ( no cost for items / upgrades ) + unlock ALL fast travel locations\n"
-                    status_text = status_text .. "HOME: Always allow fast travel with ornate mask\n"
-                    button.Text_Value = FText(status_text)
-                    button.Button_Width = 1040
-                    button.FontSize = 25
-                end
-            end
-        end
-
-        for _, scale_box in ipairs(scale_boxes) do
-            if Utils.StringContains(scale_box:GetFullName(), 'Button_Resume') then
-                scale_box.IgnoreInheritedScale = true
-            end
-        end
+local function GetPlayer()
+    local pc = UEHelpers.GetPlayerController()
+    if pc then
+        return pc.Pawn
     end
+    return nil
+end
+if not UEHelpers.GetPlayer then
+    UEHelpers.GetPlayer = GetPlayer
 end
 
-function StoneFormNoCooldown()
-    local player = UEHelpers.GetPlayer()
-    if not player then
-        print('Player not found - try again when in-game')
-        return
-    end
-    print('Setting Player Stone Form Cooldown to 0')
-    MOD_STATE.no_stone_cooldown = true
-    player.StoneFormCooldown = 0
-end
 
-function ToggleSuperStoneFormMax()
-    local player = UEHelpers.GetPlayer()
-    if not player then
-        print('Player not found - try again when in-game')
-        return
-    end
-
-    MOD_STATE.super_stone_form = not MOD_STATE.super_stone_form
-    print('Player found: ' .. player:GetFullName())
-    -- infinite stone form
-    if MOD_STATE.super_stone_form then
-        print('Setting Super Stone Form to true, next time you cast stone form it will be super')
-        player.SuperStoneForm = true
-        player.ShouldEnableSuperStoneForm = true
-        player.SuperStoneForm_Duration = 1000000
-    else
-        print('Setting Super Stone Form to false, next time you cast stone form it will be normal')
-        player.SuperStoneForm = false
-        player.ShouldEnableSuperStoneForm = false
-        player.SuperStoneForm_Duration = 0
-    end
-    UpdateButtonText()
-end
-
-function MaxResolve()
-    local player = UEHelpers.GetPlayer()
-    if not player then
-        print('Player not found - try again when in-game')
-        return
-    end
-    print('Setting Max Resolve to 1000000')
-    player.MaxResolve = 1000000
-    player.CurrentResolve = 1000000
-    player.ResolveDrainDelay = 0
-    player.ResolveDrainRate = 0
-    MOD_STATE.max_resolve = true
-end
-
-function ToggleWalkFast()
-    local player = UEHelpers.GetPlayer()
-    if not player then
-        print('Player not found - try again when in-game')
-        return
-    end
-
-    MOD_STATE.walk_fast = not MOD_STATE.walk_fast
-    if MOD_STATE.walk_fast then
-        print('Setting Walk Speed to 5 - Super Fast')
-        player.WalkSpeedModifier = 5
-    else
-        print('Setting Walk Speed to 1 - Normal Speed')
-        player.WalkSpeedModifier = 1
-    end
-    UpdateButtonText()
-end
-
-function ToggleSuperStamina()
-    local player = UEHelpers.GetPlayer()
-    if not player then
-        print('Player not found - try again when in-game')
-        return
-    end
-
-    print('Player found: ' .. player:GetFullName())
-    -- infinite stone form
-    MOD_STATE.super_stamina = not MOD_STATE.super_stamina
-    if MOD_STATE.super_stamina then
-        print('Setting Stamina Cost Modifier to 0 - Super Stamina')
-        player.StaminaCostModifier = 0
-    else
-        print('Setting Stamina Cost Modifier to 1 - Normal Stamina')
-        player.StaminaCostModifier = 1
-    end
-    UpdateButtonText()
-end
-
-function ToggleEnhancedParryChance()
-    local player = UEHelpers.GetPlayer()
-    if not player then
-        print('Player not found - try again when in-game')
-        return
-    end
-
-    -- infinite stone form
-    MOD_STATE.enhanced_parry = not MOD_STATE.enhanced_parry
-    if MOD_STATE.enhanced_parry then
-        print('Setting Enhanced Parry Chance to 100 - Enhanced Parry Chance')
-        player.EnhancedParry_Chance = 100
-    else
-        print('Setting Enhanced Parry Chance to 0 - Normal Parry Chance')
-        player.EnhancedParry_Chance = 0
-    end
-    UpdateButtonText()
-end
-
-function ToggleGodMode()
-    ---@class UCheatManager : UObject
-    local cheat_manager = FindFirstOf('CheatManager')
-    if cheat_manager then
-        print('Toggling God Mode')
-        MOD_STATE.god_mode = not MOD_STATE.god_mode
-        cheat_manager:God()
-    else
-        print('CheatManager not found - try again when in-game')
-    end
-    UpdateButtonText()
-end
-
-function ShowStatus()
-    print('=============== MOD STATUS ===============')
-    print('Super Stone Form: ' .. (MOD_STATE.super_stone_form and 'ON' or 'OFF'))
-    print('Walk Fast: ' .. (MOD_STATE.walk_fast and 'ON' or 'OFF'))
-    print('Super Stamina: ' .. (MOD_STATE.super_stamina and 'ON' or 'OFF'))
-    print('Enhanced Parry: ' .. (MOD_STATE.enhanced_parry and 'ON' or 'OFF'))
-    print('=========================================')
-end
-
--- always allow fast travel with ornate mask -- no more gettin stuck after picking up gland from boss
-function AlwaysAllowFastTravel()
-    RegisterHook('/Game/Blueprints/GamePlay/GameplayPC.GameplayPC_C:InventoryUtil_GetCanUseItem',
-        function(self, ID, UsableInDarkForm)
-            if ID:get():ToString() == 'Mask_Ornate' then
-                -- Enum_InventoryItem_CanUse -- 11 maps to NewEnumerator4 -- found value by trial and error
-                -- seems to work though and we are able to set per item
-                return 11
-            end
-        end)
-end
-
-function EnableMattsNotes()
-    MOD_STATE.enable_matts_notes = not MOD_STATE.enable_matts_notes
-    UpdateButtonText()
-end
-
-function ToggleMattsMods()
-    StoneFormNoCooldown()
-    ToggleWalkFast()
-    ToggleSuperStamina()
-    MaxResolve()
-    ToggleEnhancedParryChance()
-    AlwaysAllowFastTravel()
-    EnableMattsNotes()
-
-    -- this works - keeping just for me - most players won't enable this - good to get through areas quick for mod testing
-    local player = UEHelpers.GetPlayer()
-    if player then
-        print('Setting Temp Damage to 100 - One Hit Kill')
-        player.TempDamage = 100 -- normal 1
-    end
-
-
-    MOD_STATE.toggle_matts_mods = not MOD_STATE.toggle_matts_mods
-    if MOD_STATE.toggle_matts_mods then
-        print('Matts Mods: ON')
-    else
-        print('Matts Mods: OFF')
-        print('------------------------------------------------------------------------------------------------')
-        print('Stone Form No Cooldown: Cannot turn off ( MUST TRAVEL TO NEW AREA TO RESET )')
-        print('ONE HIT KILL: NO TOGGLE - MUST TRAVEL TO NEW AREA TO RESET')
-        print('------------------------------------------------------------------------------------------------')
-    end
-    UpdateButtonText()
-end
-
-function MaxOutInventory()
-    print('Maxing Out Inventory')
-    local inventory_component = FindFirstOf('EquipmentInventoryComponent_C')
-    if inventory_component then
-        local inventory = inventory_component.Inventory
-        if inventory then
-            for i = 1, inventory:GetArrayNum() do
-                ---@class FInventoryItem
-                local item = inventory[i]
-                if item then
-                    -- if Utils.StringContains(item.Name_124_933A963C4D9FCA5BB44069830C37A98D:ToString(), 'TarnishedSealOffering') then
-                    --     print('Tarnished Seal Offering: ' .. tostring(item.Amount_104_5BD0F40343BC83E7582405A59DEF24E8))
-                    --     item.Amount_104_5BD0F40343BC83E7582405A59DEF24E8 = 999
-                    -- end
-
-                    if item.IsStackable_49_6C7D21E34F4CA74A677416A1E92DD137 then
-                        if item.Amount_104_5BD0F40343BC83E7582405A59DEF24E8 < item.MaxStackSize_105_457804EE421C991C4D20ADA6928E4B40 then
-                            item.Amount_104_5BD0F40343BC83E7582405A59DEF24E8 = item
-                                .MaxStackSize_105_457804EE421C991C4D20ADA6928E4B40
-                        end
-                    end
-                end
-            end
-            print('All Inventory Items set to max stack size')
-        end
-    else
-        print('EquipmentInventoryComponent_C not found - try again when in-game')
-    end
-end
-
-function UnlockAllShells()
-    local player = UEHelpers.GetPlayer()
-    if not player then
-        print('Player not found - try again when in-game')
-        return
-    end
-    print('Unlocking All Shells for player')
-    player:DH_UnlockAllShells()
-end
-
-function UnlockAllPlayerFuncs()
-    local player = UEHelpers.GetPlayer()
-    if not player then
-        print('Player not found - try again when in-game')
-        return
-    end
-
-    print('Player found: ' .. player:GetFullName())
-    print('Unlocking All Shells for player')
-    player:DH_UnlockAllShells()
-    print('Unlocking All Shells Names for player')
-    player:DH_UnlockAllShellsName()
-    print('Unlocking All Weapons for player')
-    player:DH_UnlockAllWeapons()
-    print('Unlocking All Riposte for player')
-    player:DH_UnlockAllRiposte()
-    print('Activating Inactive Unlocked Shell Abilities for player')
-    player:DH_ActivateInactiveUnlockedShellAbilities()
-    print('Unlocking Ballistazooka for player')
-    player:DH_UnlockBallistazooka()
-end
-
-function ExploitInventoryAndUnlockFastTravelLocations()
-    -- INFINITE UPGRADES
-    RegisterHook('/Game/UI/Blueprints/Waifu/UI_ShellUpgradeMenu.UI_ShellUpgradeMenu_C:SetCanBuy', function(self, other)
-        local obj = self:get()
-        obj.CanBuy = true
-        obj.Tar_Cost = 0
-        obj.Glimpses_Cost = 0
-        obj.CanBuy = true
-        obj.Tar_Cost = 0
-        obj.Glimpses_Cost = 0
-    end)
-
-    -- INFINITE CURRENCY
-    RegisterHook('/Game/UI/Blueprints/Merchant/UI_MerchantPanelNew.UI_MerchantPanelNew_C:GetPlayerCurrency',
-        function(self, other)
-            return 9999
-        end)
-
-    RegisterHook('/Game/UI/Blueprints/Merchant/MerchantPanel.MerchantPanel_C:GetPlayerCurrencyAmount',
-        function(self, other)
-            return 9999999999
-        end)
-
-    RegisterHook('/Game/UI/Blueprints/Merchant/UI_MerchantPanelNew.UI_MerchantPanelNew_C:SetCanBuySelected',
-        function(self, other)
-            local obj = self:get()
-            obj.CanBuySelected = true
-            return true
-        end)
-
-
-    -- OPEN ALL FAST TRAVELS
-    RegisterHook('/Game/UI/Blueprints/Waifu/UI_FastTravel.UI_FastTravel_C:GetIsUnlocked',
-        function(self, other)
-            return true
-        end)
-end
-
-function EnableKeybinds()
-    RegisterKeyBind(Key.F1, {}, StoneFormNoCooldown)
-    RegisterKeyBind(Key.F2, {}, ToggleSuperStoneFormMax)
-    RegisterKeyBind(Key.F3, {}, ToggleWalkFast)
-    RegisterKeyBind(Key.F4, {}, ToggleSuperStamina)
-    RegisterKeyBind(Key.F5, {}, MaxResolve)
-    RegisterKeyBind(Key.F6, {}, ToggleEnhancedParryChance)
-    RegisterKeyBind(Key.F7, {}, ToggleMattsMods)
-    RegisterKeyBind(Key.F8, {}, ToggleGodMode)
-    RegisterKeyBind(Key.F9, {}, MaxOutInventory)
-    RegisterKeyBind(Key.PAGE_UP, {}, ShowStatus)
-    RegisterKeyBind(Key.NUM_LOCK, {}, UnlockAllShells)
-    RegisterKeyBind(Key.PAGE_DOWN, {}, ExploitInventoryAndUnlockFastTravelLocations)
-    RegisterKeyBind(Key.HOME, {}, AlwaysAllowFastTravel)
-    RegisterKeyBind(Key.CAPS_LOCK, {}, EnableMattsNotes)
-    RegisterKeyBind(Key.BACKSPACE, {}, UnlockAllPlayerFuncs)
-end
-
-EnableKeybinds()
-
-local function matts_mod_help(FullCommand, Parameters, Ar)
-    print('todo: help message for hotkeys')
+local function mortal_shell_mod_keybinds(Ar)
     Utils.Log(Ar, '--------------------------------')
     Utils.Log(Ar, 'F1: Stone form no cooldown')
     Utils.Log(Ar, 'F2: Toggle super stone form max')
@@ -382,33 +28,222 @@ local function matts_mod_help(FullCommand, Parameters, Ar)
     Utils.Log(Ar, 'F4: Toggle super stamina')
     Utils.Log(Ar, 'F5: Max resolve')
     Utils.Log(Ar, 'F6: Toggle enhanced parry chance')
-    Utils.Log(Ar, 'F7: Toggle matts mods')
+    Utils.Log(Ar, 'F7: Toggle all mods')
     Utils.Log(Ar, 'F8: Toggle god mode')
     Utils.Log(Ar, 'F9: Max out inventory')
     Utils.Log(Ar, 'PAGE_UP: Show mod status')
     Utils.Log(Ar, 'NUM_LOCK: Unlock all shells')
-    Utils.Log(Ar, 'PAGE_DOWN: Exploit inventory ( no cost for items / upgrades ) + unlock ALL fast travel locations')
+    Utils.Log(Ar, 'PAGE_DOWN: Exploit inventory ( no cost for items / upgrades ) + infinite currency')
     Utils.Log(Ar, 'HOME: Always allow fast travel with ornate mask')
+    Utils.Log(Ar, 'BACKSPACE: Unlock all player funcs')
     Utils.Log(Ar, '--------------------------------')
+end
+
+RegisterConsoleCommandHandler("enable_mortal_shell_mod_keybinds", function(FullCommand, Parameters, Ar)
+    CheatUtils.EnableKeybinds()
     return true
-end
+end)
 
-RegisterConsoleCommandHandler("matts_mod_help", matts_mod_help)
+RegisterConsoleCommandHandler("mortal_shell_mod_keybinds", function(FullCommand, Parameters, Ar)
+    mortal_shell_mod_keybinds(Ar)
+    return true
+end)
 
+RegisterConsoleCommandHandler("stone_form_no_cooldown", function(FullCommand, Parameters, Ar)
+    CheatUtils.StoneFormNoCooldown()
+    return true
+end)
 
-local workBenchItemTable = FindAllOf('UI_WorkbenchItemNew_C')
-if workBenchItemTable then
-    for _, item in ipairs(workBenchItemTable) do
-        print('Item: ' .. tostring(item:GetFullName()))
+RegisterConsoleCommandHandler("toggle_super_stone_form_max", function(FullCommand, Parameters, Ar)
+    CheatUtils.ToggleSuperStoneFormMax()
+    return true
+end)
 
-        if tostring(item:GetFullName()):find('TarnishedSealOffering') then
-            item:UpgradeItem()
-        end 
+RegisterConsoleCommandHandler("toggle_walk_fast", function(FullCommand, Parameters, Ar)
+    local modifier = tonumber(Parameters[1])
+    if modifier ~= nil then
+        CheatUtils.ToggleWalkFast(modifier)
+    else
+        CheatUtils.ToggleWalkFast()
     end
-end
+    return true
+end)
 
+RegisterConsoleCommandHandler("toggle_super_stamina", function(FullCommand, Parameters, Ar)
+    CheatUtils.ToggleSuperStamina()
+    return true
+end)
 
-RegisterHook('/Game/UI/Blueprints/Merchant/UI_WorkbenchItemNew.UI_WorkbenchItemNew_C:CheckIfCanObtainUpgrade',
-    function(self, other)
-        print('HasRequiredItem:::: ' .. tostring(self:get():GetFullName()))
-    end)
+RegisterConsoleCommandHandler("max_resolve", function(FullCommand, Parameters, Ar)
+    CheatUtils.MaxResolve()
+    return true
+end)
+
+RegisterConsoleCommandHandler("toggle_enhanced_parry_chance", function(FullCommand, Parameters, Ar)
+    CheatUtils.ToggleEnhancedParryChance()
+    return true
+end)
+
+RegisterConsoleCommandHandler("toggle_mods", function(FullCommand, Parameters, Ar)
+    CheatUtils.ToggleMortalShellMods()
+    local state = CheatUtils.GetModState()
+    Ar:Log("--- Mortal Shell Mods Toggled ---")
+    Ar:Log("StoneFormNoCooldown: " .. (state.no_stone_cooldown and "ON" or "OFF"))
+    Ar:Log("SuperStoneForm: "      .. (state.super_stone_form  and "ON" or "OFF"))
+    Ar:Log("WalkFast: "            .. (state.walk_fast         and "ON" or "OFF"))
+    Ar:Log("SuperStamina: "        .. (state.super_stamina     and "ON" or "OFF"))
+    Ar:Log("MaxResolve: "          .. (state.max_resolve       and "ON" or "OFF"))
+    Ar:Log("EnhancedParry: "       .. (state.enhanced_parry    and "ON" or "OFF"))
+    Ar:Log("GodMode: "             .. (state.god_mode          and "ON" or "OFF"))
+    Ar:Log("---------------------------------")
+    return true
+end)
+
+RegisterConsoleCommandHandler("toggle_god_mode", function(FullCommand, Parameters, Ar)
+    CheatUtils.ToggleGodMode()
+    return true
+end)
+
+RegisterConsoleCommandHandler("max_out_inventory", function(FullCommand, Parameters, Ar)
+    CheatUtils.MaxOutInventory()
+    return true
+end)
+
+RegisterConsoleCommandHandler("show_status", function(FullCommand, Parameters, Ar)
+    CheatUtils.ShowStatus()
+    return true
+end)
+
+RegisterConsoleCommandHandler("unlock_all_shells", function(FullCommand, Parameters, Ar)
+    CheatUtils.UnlockAllShells()
+    return true
+end)
+
+RegisterConsoleCommandHandler("unlock_all_player_funcs", function(FullCommand, Parameters, Ar)
+    CheatUtils.UnlockAllPlayerFuncs()
+    return true
+end)
+
+RegisterConsoleCommandHandler("exploit_inventory", function(FullCommand, Parameters, Ar)
+    CheatUtils.ExploitInventory()
+    return true
+end)
+
+RegisterConsoleCommandHandler("enable_all_fast_travels", function(FullCommand, Parameters, Ar)
+    CheatUtils.OpenAllFastTravels()
+    return true
+end)
+
+RegisterConsoleCommandHandler("always_allow_fast_travel", function(FullCommand, Parameters, Ar)
+    CheatUtils.AlwaysAllowFastTravel()
+    return true
+end)
+
+RegisterConsoleCommandHandler("enable_weapon_mod_keybinds", function(FullCommand, Parameters, Ar)
+    CheatUtils.EnableWeaponModKeybinds()
+    return true
+end)
+
+RegisterConsoleCommandHandler("max_out_bolts", function(FullCommand, Parameters, Ar)
+    CheatUtils.MaxOutBolts()
+    return true
+end)
+
+RegisterConsoleCommandHandler("super_b", function(FullCommand, Parameters, Ar)
+    CheatUtils.SuperBallistazooka()
+    return true
+end)
+
+RegisterConsoleCommandHandler("summon_weapon", function(FullCommand, Parameters, Ar)
+    local weapon_id = tonumber(Parameters[1])
+    if weapon_id ~= nil then
+        WeaponMod.SummonWeaponFromKeybind(weapon_id)
+    else
+        Ar:Log("Usage: summon_weapon <weapon_id> 0-5")
+    end
+
+    return true
+end)
+
+RegisterConsoleCommandHandler("max_all_familiarity", function(FullCommand, Parameters, Ar)
+    CheatUtils.MaxAllFamiliarity()
+    return true
+end)
+
+RegisterConsoleCommandHandler("add_all_consumables", function(FullCommand, Parameters, Ar)
+    CheatUtils.AddAllConsumables()
+    return true
+end)
+
+RegisterConsoleCommandHandler("unlock_all_item_entries", function(FullCommand, Parameters, Ar)
+    CheatUtils.UnlockAllItemEntries()
+    return true
+end)
+
+RegisterConsoleCommandHandler("unlock_all_tutorials", function(FullCommand, Parameters, Ar)
+    CheatUtils.UnlockAllTutorials()
+    return true
+end)
+
+RegisterConsoleCommandHandler("toggle_fog", function(FullCommand, Parameters, Ar)
+    CheatUtils.ToggleFog()
+    return true
+end)
+
+RegisterConsoleCommandHandler("more_enemies", function(FullCommand, Parameters, Ar)
+    CheatUtils.SpawnMoreEnemies()
+    return true
+end)
+
+RegisterConsoleCommandHandler("one_hit_kill", function(FullCommand, Parameters, Ar)
+    CheatUtils.EnableOneHitKill()
+    return true
+end)
+
+RegisterConsoleCommandHandler("passive_tar", function(FullCommand, Parameters, Ar)
+    CheatUtils.PassiveTarAndGlimpses()
+    return true
+end)
+
+RegisterConsoleCommandHandler("hit_enemies", function(FullCommand, Parameters, Ar)
+    HitAllSpawnedEnemies()
+    print("HIT ALL SPAWNED ENEMIES")
+    Ar:Log("HIT ALL SPAWNED ENEMIES")
+    return true
+end)
+
+RegisterConsoleCommandHandler("mortal_shell_mod", function(FullCommand, Parameters, Ar)
+    
+    Utils.Log(Ar, "CMDS AVAILABLE: ")
+    Utils.Log(Ar, "enable_mortal_shell_mod_keybinds: Enable mortal shell mod keybinds")
+    Utils.Log(Ar, "mortal_shell_mod_keybinds: Show mortal shell mod keybinds")
+    Utils.Log(Ar, "stone_form_no_cooldown: No cooldown for stone form")
+    Utils.Log(Ar, "toggle_super_stone_form_max: Toggle super stone form max")
+    Utils.Log(Ar, "toggle_walk_fast: Toggle walk fast")
+    Utils.Log(Ar, "toggle_super_stamina: Toggle super stamina")
+    Utils.Log(Ar, "max_resolve: Max resolve")
+    Utils.Log(Ar, "toggle_enhanced_parry_chance: Toggle enhanced parry chance")
+    Utils.Log(Ar, "toggle_mods: Toggle all mods at once")
+    Utils.Log(Ar, "toggle_god_mode: Toggle god mode")
+    Utils.Log(Ar, "max_out_inventory: Max out inventory")
+    Utils.Log(Ar, "show_status: Show status")
+    Utils.Log(Ar, "unlock_all_shells: Unlock all shells")
+    Utils.Log(Ar, "unlock_all_player_funcs: Unlock all player funcs")
+    Utils.Log(Ar, "exploit_inventory: Zero-cost upgrades + infinite currency")
+    Utils.Log(Ar, "enable_all_fast_travels: Unlock all fast travel locations")
+    Utils.Log(Ar, "always_allow_fast_travel: Always allow fast travel")
+    Utils.Log(Ar, "enable_weapon_mod_keybinds: Enable weapon mod keybinds")
+    Utils.Log(Ar, "max_out_bolts: Max out bolts")
+    Utils.Log(Ar, "super_b: Super ballistazooka")
+    Utils.Log(Ar, "summon_weapon <int>: Summon weapon from keybind 0-5")
+    Utils.Log(Ar, "max_all_familiarity: Max all familiarity")
+    Utils.Log(Ar, "add_all_consumables: Add all consumables")
+    Utils.Log(Ar, "unlock_all_item_entries: Unlock all item entries")
+    Utils.Log(Ar, "unlock_all_tutorials: Unlock all tutorials")
+    Utils.Log(Ar, "toggle_fog: Toggle fog")
+    Utils.Log(Ar, "more_enemies: Spawn more enemies")
+    Utils.Log(Ar, "one_hit_kill: One hit kill")
+    Utils.Log(Ar, "passive_tar: Passive tar and glimpses")
+    Utils.Log(Ar, "hit_enemies: Hit all spawned enemies")
+    return true
+end)
